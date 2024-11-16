@@ -8,9 +8,11 @@ import profileRoutes from "./routes/profileRoutes.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 7001;
+
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use("/public", express.static("public"));
 
 app.use("/", authRoutes);
 app.use("/", profileRoutes);

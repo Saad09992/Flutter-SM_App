@@ -5,6 +5,7 @@ import {
   updateUserAvatar,
 } from "../controllers/profileController.js";
 import multer from "multer";
+import path from "path";
 
 const profileRouter = express.Router();
 
@@ -26,7 +27,7 @@ profileRouter.post("/api/get-user-data", getUserData);
 profileRouter.post("/api/update-user-data", updateUserData);
 profileRouter.post(
   "/api/update-user-avatar",
-  upload.single("profilePicture"),
+  upload.single("avatar"),
   updateUserAvatar
 );
 

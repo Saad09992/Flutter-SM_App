@@ -58,7 +58,6 @@ export const updateUserData = async (req, res) => {
 export const updateUserAvatar = async (req, res) => {
   const { uid } = req.body;
   const filename = req.file.filename;
-  console.log(req);
   try {
     const getUser = await User.findById(uid);
     if (getUser) {

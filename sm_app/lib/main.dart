@@ -17,9 +17,7 @@ class MainApp extends StatelessWidget {
       initialBinding: InitDependencies(),
       theme: ThemeData(
           appBarTheme: const AppBarTheme(backgroundColor: Colors.blue)),
-
       initialRoute: RoutesName.splash,
-      // sends current/changed route to generateRoute method in Routes class
       onGenerateRoute: Routes.generateRoute,
     );
   }

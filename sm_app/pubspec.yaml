@@ -8,11 +8,14 @@ environment:
 
 dependencies:
   another_flushbar: ^1.12.30
+  dio: ^5.7.0
   flutter:
     sdk: flutter
   flutter_secure_storage: ^9.2.2
   get:
   http: ^1.2.2
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
