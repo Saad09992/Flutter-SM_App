@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:sm_app/model/user_model.dart';
 import 'package:sm_app/network/image_service.dart';
 import 'package:sm_app/network/network_api_service.dart';
@@ -54,44 +53,17 @@ class UserController extends GetxController {
     Utils.displayMessages(res, context);
   }
 
-  void UpdateUserAvatar(File imageFile, BuildContext context) async {
+  Future<void> UpdateUserAvatar(File imageFile, BuildContext context) async {
     try {
       // Log the file path for debugging
       print("Uploading file: ${imageFile.path}");
 
-      var response = await ImageService.uploadFile(imageFile.path);
-
-      if (response.statusCode == 200) {
-        // Log successful upload
-        print("Upload successful: ${response.data}");
-
-        _avatarPath = response.data['user']['image'];
-        Get.snackbar(
-          'Success',
-          'Image uploaded successfully',
-          margin: const EdgeInsets.only(top: 5, left: 10, right: 10),
-        );
-      } else if (response.statusCode == 401) {
-        Get.offAllNamed('/sign_up');
-      } else {
-        // Log failure response
-        print("Upload failed: ${response.statusCode} - ${response.data}");
-
-        Get.snackbar(
-          'Failed',
-          'Error Code: ${response.statusCode}',
-          margin: const EdgeInsets.only(top: 5, left: 10, right: 10),
-        );
-      }
+      final res = await ImageService.uploadFile(imageFile.path);
+      Utils.displayMessages(res, context);
+      _avatarPath = res.data['user']['image'];
     } catch (e) {
       // Log exception
       print("Upload exception: $e");
-
-      Get.snackbar(
-        'Error',
-        'Failed to upload image: $e',
-        margin: const EdgeInsets.only(top: 5, left: 10, right: 10),
-      );
     }
   }
 

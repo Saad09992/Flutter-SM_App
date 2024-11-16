@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,8 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final UserController userController = Get.find();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
-
-  File? _selectedImage;
+  File? selectedImage;
 
   @override
   void initState() {
@@ -33,36 +34,64 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
+  Future<void> _handleAvatarUpdate() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? pickedImage =
-        await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-    }
-  }
+    try {
+      final XFile? pickedImage = await picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
 
-  Future<void> _uploadImage() async {
-    if (_selectedImage != null) {
-      try {
-        // Pass the selected image to the controller's upload method
-        userController.UpdateUserAvatar(_selectedImage!, context);
-        userController.getUserData(context); // Refresh user data
-      } catch (e) {
-        Get.snackbar(
-          "Error",
-          "Failed to upload image: $e",
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+      if (pickedImage != null) {
+        setState(() {
+          selectedImage = File(pickedImage.path);
+        });
+
+        // Show confirmation dialog
+        final bool? shouldUpload = await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Upload New Avatar?'),
+              content: SizedBox(
+                width: 200,
+                height: 200,
+                child: Image.file(
+                  selectedImage!,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text('Upload'),
+                ),
+              ],
+            );
+          },
         );
+
+        if (shouldUpload == true) {
+          await userController.UpdateUserAvatar(selectedImage!, context);
+        } else {
+          setState(() {
+            selectedImage = null;
+          });
+        }
       }
-    } else {
+    } catch (e) {
+      if (Get.isDialogOpen ?? false) {
+        Get.back();
+      }
+
       Get.snackbar(
         "Error",
-        "Please select an image first.",
+        "Failed to update profile picture",
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
@@ -77,9 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () {
-              userController.getUserData(context);
-            },
+            onPressed: () => userController.getUserData(context),
           ),
         ],
       ),
@@ -96,43 +123,52 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Display the user's avatar
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.grey[200],
-                    backgroundImage:
-                        (userController.userModel?.data?.avatar != null &&
-                                userController.userModel?.data?.avatar != '')
-                            ? CachedNetworkImageProvider(
-                                userController.userModel!.data!.avatar!)
-                            : const AssetImage('assets/icons/no_user.jpg')
-                                as ImageProvider,
+                  // Interactive avatar with hover effect
+                  Stack(
+                    children: [
+                      Material(
+                        elevation: 4,
+                        shape: const CircleBorder(),
+                        child: InkWell(
+                          onTap: _handleAvatarUpdate,
+                          customBorder: const CircleBorder(),
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundColor: Colors.grey[200],
+                            backgroundImage: selectedImage != null
+                                ? FileImage(selectedImage!)
+                                : (userController.userModel?.data?.avatar !=
+                                            null &&
+                                        userController
+                                                .userModel?.data?.avatar !=
+                                            '')
+                                    ? CachedNetworkImageProvider(
+                                        userController.userModel!.data!.avatar!)
+                                    : const AssetImage(
+                                            'assets/icons/no_user.jpg')
+                                        as ImageProvider,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // Button to pick and upload image
-                  ElevatedButton.icon(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.image),
-                    label: const Text("Choose Image"),
-                  ),
-                  if (_selectedImage != null) ...[
-                    const SizedBox(height: 10),
-                    Image.file(
-                      _selectedImage!,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton.icon(
-                      onPressed: _uploadImage,
-                      icon: const Icon(Icons.upload),
-                      label: const Text("Upload Image"),
-                    ),
-                  ],
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
                   // Display or edit the username
                   userController.isEditing
