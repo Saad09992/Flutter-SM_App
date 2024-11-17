@@ -1,7 +1,8 @@
 // ignore_for_file: use_build_context_synchronously, prefer_final_fields, avoid_print
 
 import 'dart:io';
-
+import 'package:dio/dio.dart' as dio;
+import 'package:get/get_connect/http/src/multipart/form_data.dart' as form;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sm_app/model/user_model.dart';
@@ -53,7 +54,7 @@ class UserController extends GetxController {
     Utils.displayMessages(res, context);
   }
 
-  Future<void> UpdateUserAvatar(File imageFile, BuildContext context) async {
+  Future<void> updateUserAvatar(File imageFile, BuildContext context) async {
     try {
       // Log the file path for debugging
       print("Uploading file: ${imageFile.path}");

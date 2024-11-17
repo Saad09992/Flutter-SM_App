@@ -4,4 +4,5 @@ class RoutesName {
   static const String home = 'home_page';
   static const String splash = 'splash_page';
   static const String profile = 'profile_page';
+  static const String upload_post = 'upload_post_page';
 }

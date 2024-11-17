@@ -5,4 +5,5 @@ class Urls {
   static var getUserData = '$baseUrl/api/get-user-data';
   static var updateUserData = '$baseUrl/api/update-user-data';
   static var updateUserAvatar = '$baseUrl/api/update-user-avatar';
+  static var uploadPost = '$baseUrl/api/upload-post';
 }

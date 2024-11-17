@@ -77,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
         );
 
         if (shouldUpload == true) {
-          await userController.UpdateUserAvatar(selectedImage!, context);
+          await userController.updateUserAvatar(selectedImage!, context);
         } else {
           setState(() {
             selectedImage = null;

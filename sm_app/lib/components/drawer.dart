@@ -22,6 +22,8 @@ class CustomDrawer extends StatelessWidget {
                       context, RoutesName.home, 'Home', Icons.home),
                   _buildDrawerItem(
                       context, RoutesName.profile, 'Profile', Icons.person),
+                  _buildDrawerItem(context, RoutesName.upload_post,
+                      'Upload Post', Icons.post_add),
                 ] else ...[
                   _buildDrawerItem(
                       context, RoutesName.signup, 'SignUp', Icons.person),

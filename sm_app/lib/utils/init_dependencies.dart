@@ -1,5 +1,6 @@
 import 'package:sm_app/controller/auth_controller.dart';
 import 'package:get/get.dart';
+import 'package:sm_app/controller/post_controller.dart';
 import 'package:sm_app/controller/user_controller.dart';
 
 class InitDependencies extends Bindings {
@@ -7,5 +8,6 @@ class InitDependencies extends Bindings {
   void dependencies() {
     Get.lazyPut(() => AuthController());
     Get.lazyPut(() => UserController());
+    Get.lazyPut(() => PostController());
   }
 }
