@@ -1,8 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, prefer_final_fields, avoid_print
 
 import 'dart:io';
-import 'package:dio/dio.dart' as dio;
-import 'package:get/get_connect/http/src/multipart/form_data.dart' as form;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sm_app/model/user_model.dart';
@@ -24,6 +22,9 @@ class UserController extends GetxController {
 
   RxString _avatarPath = ''.obs;
   get avatarPath => _avatarPath.value;
+
+  RxString _uid = "".obs;
+  get uid => _uid.value;
 
 // Network functions
   Future<void> getUserData(BuildContext context) async {
@@ -69,6 +70,10 @@ class UserController extends GetxController {
   }
 
 // Helper functions
+
+  Future<void> getUserId() async {
+    _uid.value = await _secureStorage.readStorageData('uid') as String;
+  }
 
   void setIsEditing(bool value) {
     _isEditing.value = value;

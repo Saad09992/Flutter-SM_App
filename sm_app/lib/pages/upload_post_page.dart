@@ -3,10 +3,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/list_notifier.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sm_app/components/drawer.dart';
 import 'package:sm_app/controller/post_controller.dart';
-import 'package:sm_app/utils/routes/routes.dart';
 import 'package:sm_app/utils/routes/routes_name.dart';
 
 class UploadPostPage extends StatefulWidget {
@@ -113,6 +113,13 @@ class _UploadPostPageState extends State<UploadPostPage> {
         );
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   @override

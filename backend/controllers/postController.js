@@ -82,7 +82,8 @@ export const delPost = async (req, res) => {
 export const likePost = async (req, res) => {
   try {
     const { uid, postId } = req.body;
-
+    console.log(uid);
+    console.log(postId);
     if (!uid || !postId) {
       return res.json({ msg: "Missing required fields", status: "error" });
     }

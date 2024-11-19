@@ -27,6 +27,6 @@ const upload = multer({ storage: storage });
 postRouter.post("/api/upload-post", upload.single("post-image"), uploadPost);
 postRouter.get("/api/get-posts", getPosts);
 postRouter.post("/api/delete-posts", delPost);
-postRouter.post("/api/like-posts", likePost);
+postRouter.post("/api/like-post", likePost);
 
 export default postRouter;

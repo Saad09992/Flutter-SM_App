@@ -6,4 +6,6 @@ class Urls {
   static var updateUserData = '$baseUrl/api/update-user-data';
   static var updateUserAvatar = '$baseUrl/api/update-user-avatar';
   static var uploadPost = '$baseUrl/api/upload-post';
+  static var getPosts = '$baseUrl/api/get-posts';
+  static var likePost = '$baseUrl/api/like-post';
 }
